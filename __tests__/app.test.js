@@ -33,7 +33,7 @@ describe("GET /api/topics", () => {
          });
    });
 });
-describe.only('GET /api/articles/:article_id', () => { 
+describe('GET /api/articles/:article_id', () => { 
     test('200: responds with an article object corresponded with article number passed', () => {
         const ARTICLE_ID = 1;
         return request(app)
@@ -61,7 +61,7 @@ describe.only('GET /api/articles/:article_id', () => {
             expect(response.body.msg).toBe('Article not found! Please try again')
         })
     })
-    test.only('400: responds with a error message when client pass article_id which is not a number', () => {
+    test('400: responds with a error message when client pass article_id which is not a number', () => {
         const ARTICLE_ID = 'banana';
         return request(app)
         .get(`/api/articles/${ARTICLE_ID}`)
