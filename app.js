@@ -1,5 +1,5 @@
 const express = require('express');
-const { getTopics } = require('./controllers/news.controllers');
+const { getTopics } = require('./controllers/topics.controllers');
 
 const app = express();
 

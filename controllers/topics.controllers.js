@@ -1,4 +1,4 @@
-const { showTopics } = require('../models/news.models')
+const { showTopics } = require('../models/topics.models')
 
 
 exports.getTopics = (req, res, next) => {
