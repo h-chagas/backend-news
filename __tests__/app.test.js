@@ -10,7 +10,7 @@ afterAll(() => db.end());
 describe("GET /api/topics", () => {
    test("404: responds with a message not found if a bad path is used", () => {
       return request(app)
-         .get("/api/oops")
+         .get("/api/i-am-not-a-topic")
          .expect(404)
          .then((response) => {
             expect(response.body).toEqual({ msg: "route not found" });
@@ -70,4 +70,32 @@ describe('GET /api/articles/:article_id', () => {
             expect(response.body.msg).toBe('Please type/select a number to choose an article')
         })
     })
+});
+
+describe('GET /api/users', () => { 
+   test('200: responds with an array of users', () => { 
+    return request(app)
+    .get('/api/users')
+    .expect(200)
+    .then((response) => {
+        expect(typeof response.body).toBe('object')
+        expect(Array.isArray(response.body)).toBe(true)
+        expect(response.body.length > 0).toBe(true)
+        response.body.forEach((user) => {
+            expect(user).toMatchObject({
+                username: expect.any(String),
+                name: expect.any(String),
+                avatar_url: expect.any(String),
+            })
+        })
+    })
+    });
+    test("404: responds with a message not found if a bad path is used", () => {
+        return request(app)
+           .get("/api/i-am-not-a-user")
+           .expect(404)
+           .then((response) => {
+              expect(response.body).toEqual({ msg: "route not found" });
+           });
+     });
  })
