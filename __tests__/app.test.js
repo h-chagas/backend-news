@@ -33,6 +33,7 @@ describe("GET /api/topics", () => {
          });
    });
 });
+
 describe('GET /api/articles/:article_id', () => { 
     test('200: responds with an article object corresponded with article number passed', () => {
         const ARTICLE_ID = 1;
@@ -98,4 +99,42 @@ describe('GET /api/users', () => {
               expect(response.body).toEqual({ msg: "route not found" });
            });
      });
- })
+});
+
+describe('PATCH /api/articles/:article_id', () => {
+    test('200: responds with an article updated chosen by id', () => {
+        const newVote = 15;
+        const updateVotes = { inc_votes: newVote }
+        const ARTICLE_ID = 9;
+
+        return request(app)
+        .patch(`/api/articles/${ARTICLE_ID}`)
+        .send(updateVotes)
+        .expect(200)
+        .then(({body}) => {
+            expect(typeof body).toBe('object')
+            expect(body).toEqual({
+                votes: newVote,
+                ...body
+            })
+        })
+    })
+    test('404: responds with a error message when article_id doesn\'t exist', () => {
+        const ARTICLE_ID = 88;
+        return request(app)
+        .get(`/api/articles/${ARTICLE_ID}`)
+        .expect(404)
+        .then((response) => {
+            expect(response.body.msg).toBe('Article not found! Please try again')
+        })
+    })
+    test('400: responds with a error message when client pass article_id which is not a number', () => {
+        const ARTICLE_ID = true;
+        return request(app)
+        .get(`/api/articles/${ARTICLE_ID}`)
+        .expect(400)
+        .then((response) => {
+            expect(response.body.msg).toBe('Please type/select a number to choose an article')
+        })
+    })
+});
