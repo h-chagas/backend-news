@@ -1,15 +1,16 @@
 const express = require('express');
 
-const { getArticlesById } = require('./controllers/articles.controller');
+const { getArticlesById, patchArticlesById } = require('./controllers/articles.controller');
 const { getTopics } = require('./controllers/topics.controllers');
 const { getUsers } = require('./controllers/users.controller');
 
-
 const app = express();
+app.use(express.json());
 
 app.get('/api/topics', getTopics);
 app.get('/api/articles/:article_id', getArticlesById);
 app.get('/api/users', getUsers);
+app.patch('/api/articles/:article_id', patchArticlesById);
 
 app.all('/*', (req, res) => {
     res.status(404).send({msg: 'route not found'})
