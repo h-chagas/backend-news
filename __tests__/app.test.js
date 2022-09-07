@@ -112,6 +112,8 @@ describe('PATCH /api/articles/:article_id', () => {
         .send(updateVotes)
         .expect(200)
         .then(({body}) => {
+            expect(Object.keys(body).length > 0).toBe(true)
+            expect(typeof updateVotes.inc_votes).toBe('number')
             expect(typeof body).toBe('object')
             expect(body).toEqual({
                 votes: newVote,
