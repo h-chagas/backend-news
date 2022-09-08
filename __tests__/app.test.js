@@ -41,6 +41,7 @@ describe("GET /api/articles/:article_id", () => {
          .get(`/api/articles/${ARTICLE_ID}`)
          .expect(200)
          .then((response) => {
+            expect(Object.keys(response.body).length > 0).toBe(true)
             expect(typeof response.body).toBe("object");
             expect(response.body).toMatchObject({
                article_id: 1,
