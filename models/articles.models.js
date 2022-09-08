@@ -28,7 +28,6 @@ exports.updateArticleVotes = (article_id, updateVotes) => {
       });
 };
 
-
 exports.showArticles = (topic) => {
    let queryStr = `SELECT
 articles.author, 
@@ -51,7 +50,14 @@ LEFT JOIN comments ON articles.article_id = comments.article_id
 
    queryStr += `GROUP BY articles.article_id ORDER BY articles.created_at DESC;`;
 
-   return db.query(queryStr, queryValue).then((result) => {
+   return db.query(queryStr, queryValue)
+   .then((result) => {
+      if (result.rowCount === 0) {
+         return Promise.reject({
+            status: 404,
+            msg: "Topic doesn\'t exist or not related to any of articles.",
+         });
+      }
       return result.rows;
    });
 };
