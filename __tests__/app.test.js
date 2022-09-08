@@ -149,7 +149,7 @@ describe("PATCH /api/articles/:article_id", () => {
    });
 });
 describe("8. GET /api/articles", () => {
-   test("200: responds with an array of articles", () => {
+   test("200: responds with an array of articles sorted by date in descending order", () => {
       return request(app)
          .get("/api/articles")
          .expect(200)
@@ -157,6 +157,8 @@ describe("8. GET /api/articles", () => {
             expect(typeof response.body).toBe('object')
             expect(Array.isArray(response.body)).toBe(true);
             expect(response.body.length > 0).toBe(true);
+            expect(response.body).toBeSortedBy('created_at', {descending: true,})
+            console.log(response.body, '<<< my response.body')
             response.body.forEach((article) => {
                 expect(article).toMatchObject({
                     author: expect.any(String),
