@@ -13,7 +13,7 @@ app.all('/*', (req, res) => {
 //Custom error handling
 app.use((err, req, res, next) => {
     if (err.code === '22P02') {
-        res.status(400).send({msg: 'Please type/select a number to choose an article'})
+        res.status(400).send({msg: 'Bad request. Invalid datatype.'})
     }
     else if (err.status && err.msg) {
         res.status(err.status).send({ msg: err.msg })
