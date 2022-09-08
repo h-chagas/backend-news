@@ -41,6 +41,7 @@ describe('GET /api/articles/:article_id', () => {
         .get(`/api/articles/${ARTICLE_ID}`)
         .expect(200)
         .then((response) => {
+            expect(Object.keys(response.body).length > 0).toBe(true)
             expect(typeof response.body).toBe('object')
             expect(response.body).toMatchObject({
                 article_id: 1,
@@ -50,6 +51,7 @@ describe('GET /api/articles/:article_id', () => {
                 body: 'I find this existence challenging',
                 created_at: '2020-07-09T20:11:00.000Z',
                 votes: 100,
+                comment_count: 11
             })
         })
     })
