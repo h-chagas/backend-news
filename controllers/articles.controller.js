@@ -9,7 +9,7 @@ exports.getArticlesById = (req, res, next) => {
 
    showArticlesById(article_id)
       .then((article) => {
-         res.send(article);
+         res.status(200).send(article);
       })
       .catch((err) => {
          next(err);
