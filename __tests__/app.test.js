@@ -72,7 +72,7 @@ describe("GET /api/articles/:article_id", () => {
          .expect(400)
          .then((response) => {
             expect(response.body.msg).toBe(
-               "Please type/select a number to choose an article"
+               "Bad request. Invalid datatype."
             );
          });
    });
@@ -144,12 +144,12 @@ describe("PATCH /api/articles/:article_id", () => {
          .expect(400)
          .then((response) => {
             expect(response.body.msg).toBe(
-               "Please type/select a number to choose an article"
+               "Bad request. Invalid datatype."
             );
          });
    });
 });
-describe("8. GET /api/articles", () => {
+describe("GET /api/articles", () => {
    test("200: responds with an array of articles sorted by date in descending order", () => {
       return request(app)
          .get("/api/articles")
@@ -159,7 +159,6 @@ describe("8. GET /api/articles", () => {
             expect(Array.isArray(response.body)).toBe(true);
             expect(response.body.length > 0).toBe(true);
             expect(response.body).toBeSortedBy('created_at', {descending: true,})
-            console.log(response.body, '<<< my response.body')
             response.body.forEach((article) => {
                 expect(article).toMatchObject({
                     author: expect.any(String),
@@ -180,7 +179,7 @@ describe("8. GET /api/articles", () => {
         .then((response) => {
             expect(typeof response.body).toBe('object')
             expect(Array.isArray(response.body)).toBe(true);
-            expect(response.body.length > 0).toBe(true);
+            expect(response.body).toHaveLength(1);
             response.body.forEach((article) => {
                 const TOPIC = 'cats';
                 expect(article).toMatchObject({
@@ -196,5 +195,27 @@ describe("8. GET /api/articles", () => {
                         
         })
    })
+   test("404: response with message topic not found", () => {
+    const NOT_EXIST_TOPIC = 'paper';
+    return request(app)
+        .get(`/api/articles?topic=${NOT_EXIST_TOPIC}`)
+        .expect(404)
+        .then((response) => {
+            expect(response.body.msg).toBe('Topic doesn\'t exist or not related to any of articles.')
+            
+                        
+        })
+   })
+   test("400: responds with a error message when client pass article_id which is not a number", () => {
+    const NOT_VALID_TOPIC = true;
+    return request(app)
+       .get(`/api/articles/${NOT_VALID_TOPIC}`)
+       .expect(400)
+       .then((response) => {
+            expect(response.body.msg).toBe(
+             "Bad request. Invalid datatype."
+          );
+       });
+ });
    
 });
