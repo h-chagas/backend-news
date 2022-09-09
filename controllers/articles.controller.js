@@ -2,6 +2,7 @@ const {
    showArticlesById,
    updateArticleVotes,
    showArticles,
+   showCommentsByArticleId,
 } = require("../models/articles.models");
 
 exports.getArticlesById = (req, res, next) => {
@@ -41,3 +42,16 @@ exports.getArticles = (req, res, next) => {
          next(err);
       });
 };
+
+exports.getCommentsByArticleId = (req, res, next) => {
+
+   const { article_id } = req.params;
+
+   showCommentsByArticleId(article_id)
+   .then((comments) => {
+      res.status(200).send(comments)
+   })
+   .catch((err) => {
+      next(err)
+   })
+}
