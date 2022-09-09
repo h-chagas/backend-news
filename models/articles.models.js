@@ -61,3 +61,23 @@ LEFT JOIN comments ON articles.article_id = comments.article_id
       return result.rows;
    });
 };
+
+exports.showCommentsByArticleId = (article_id) => {
+    return db
+    .query(
+        `
+        SELECT * 
+        FROM comments 
+        WHERE article_id=$1;
+        `
+       , [article_id])
+    .then((result) => {
+        if (result.rowCount === 0) {
+            return Promise.reject({
+               status: 404,
+               msg: "No comments for this article.",
+            });
+         }
+        return result.rows
+    })
+}
