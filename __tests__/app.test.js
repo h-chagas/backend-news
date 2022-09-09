@@ -219,3 +219,47 @@ describe("GET /api/articles", () => {
  });
    
 });
+describe('GET /api/articles/:article_id/comments', () => {
+    test.only('200: responds with an array of comments for the given article_id', () => { 
+        const ARTICLE_ID = 1
+        return request(app)
+        .get(`/api/articles/${ARTICLE_ID}/comments`)
+        .expect(200)
+        .then((response) => {
+            expect(typeof response.body).toBe('object');
+            expect(Array.isArray(response.body)).toBe(true);
+            expect(response.body).toHaveLength(11);
+            response.body.forEach((comment) => {
+                expect(comment).toMatchObject({
+                    comment_id: expect.any(Number),
+                    body: expect.any(String),
+                    article_id: expect.any(Number),
+                    author: expect.any(String),
+                    votes: expect.any(Number),
+                    created_at: expect.any(String),
+                })
+            })
+        })
+     })
+     test('404: responds with a message there is no comments', () => {
+        const ARTICLE_ID = 10000;
+        return request(app)
+        .get(`/api/articles/${ARTICLE_ID}/comments`)
+        .expect(404)
+        .then((response) => {
+            expect(response.body.msg).toBe('No comments for this article.')
+        })
+    })
+    test('400: responds with a message when an invalid article_id is passed', () => {
+        const ARTICLE_ID = 'IAmAString';
+        return request(app)
+        .get(`/api/articles/${ARTICLE_ID}/comments`)
+        .expect(400)
+        .then((response) => {
+            console.log(response, '<<<<<<<<<response')
+            expect(response.body.msg).toBe('Bad request. Invalid datatype.')
+        })
+
+    })
+     
+});
